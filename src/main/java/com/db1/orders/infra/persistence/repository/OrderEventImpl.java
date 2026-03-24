@@ -1,6 +1,7 @@
 package com.db1.orders.infra.persistence.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -43,5 +44,10 @@ public class OrderEventImpl implements IOrderEventRepository {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<OrderEventEntity> findByProcessedFalse() {
+        return repository.findByProcessedFalse();
     }
 }

@@ -10,6 +10,8 @@ public interface IOrderRepository {
     Orders save(Orders order);
 
     Optional<Orders> findById(UUID id);
-    
+
     Orders findByOrderId(String orderId);
+
+    void updateStatus(String orderId, String status, String reason);
 }

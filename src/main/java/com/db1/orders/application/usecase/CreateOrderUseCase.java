@@ -3,6 +3,7 @@ package com.db1.orders.application.usecase;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.db1.orders.application.port.out.OrderEventPublisher;
@@ -30,6 +31,7 @@ public class CreateOrderUseCase {
     private final TransactionTemplate transactionTemplate;
     private final IdempotencyKeyManager idempotencyKeyManager;
 
+    @Transactional
     public Orders execute(Orders order, String idempotencyKey) {
         var existingOrderId = idempotencyKeyManager.getOrderIdForKey(idempotencyKey);
         if (existingOrderId != null) {

@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -19,12 +20,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(
-    name = "orders",
-    uniqueConstraints = {
+@Table(name = "orders", uniqueConstraints = {
         @UniqueConstraint(name = "uk_order_order_id", columnNames = "orderId")
-    }
-)
+})
 @Getter
 @Setter
 public class OrdersEntity {
@@ -37,7 +35,7 @@ public class OrdersEntity {
 
     private String customerId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItemEntity> items;
 
     private String status;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.db1.orders.domain.interfaces.IOrderRepository;
 import com.db1.orders.domain.modal.Orders;
+import com.db1.orders.infra.persistence.entity.OrdersEntity;
 import com.db1.orders.infra.persistence.mapper.OrdersMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,19 @@ public class OrderRepositoryImpl implements IOrderRepository {
     public Orders findByOrderId(String orderId) {
         return jpaRepository.findByOrderId(orderId)
                 .map(OrdersMapper::toDomain)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+                .orElse(null);
+    }
+
+    @Override
+    public void updateStatus(String orderId, String status, String reason) {
+        OrdersEntity entity = jpaRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("OrderId não encontrado: " + orderId));
+
+        entity.setStatus(status);
+        if (reason != null) {
+            entity.setReason(reason);
+        }
+
+        jpaRepository.save(entity);
     }
 }

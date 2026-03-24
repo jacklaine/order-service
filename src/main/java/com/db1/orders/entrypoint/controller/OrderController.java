@@ -1,5 +1,6 @@
 package com.db1.orders.entrypoint.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class OrderController {
                                 createdOrder.getOrderId(),
                                 createdOrder.getStatus().getKey());
 
-                return ResponseEntity.ok(response);
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
 
         @GetMapping("/{orderId}")
@@ -42,7 +43,7 @@ public class OrderController {
                 Orders order = findOrderByUseCase.execute(orderId);
 
                 if (order == null) {
-                        return ResponseEntity.notFound().build();
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
                 }
 
                 return ResponseEntity.ok(order);

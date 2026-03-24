@@ -1,9 +1,11 @@
 package com.db1.orders.infra.persistence.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.db1.orders.domain.enums.EnumOrderStatus;
 import com.db1.orders.domain.modal.OrderItem;
 import com.db1.orders.domain.modal.Orders;
 import com.db1.orders.infra.persistence.entity.OrderItemEntity;
@@ -17,11 +19,12 @@ public class OrdersMapper {
         entity.setCustomerId(order.getCustomerId());
         entity.setStatus(order.getStatus().getKey());
         entity.setOrderId(order.getOrderId());
+        entity.setReason(order.getReason());
 
         if (order.getItems() != null) {
-            List<OrderItemEntity> items = order.getItems().stream()
+            List<OrderItemEntity> items = new ArrayList<>(order.getItems().stream()
                     .map(item -> OrderItemMapper.toEntity(item, entity))
-                    .toList();
+                    .toList());
             entity.setItems(items);
         }
 
@@ -29,7 +32,7 @@ public class OrdersMapper {
     }
 
     public static Orders toDomain(OrdersEntity entity) {
-             List<OrderItem> items = null;
+        List<OrderItem> items = null;
 
         if (entity.getItems() != null) {
             items = entity.getItems().stream()
@@ -37,10 +40,16 @@ public class OrdersMapper {
                     .toList();
         }
 
-        return new Orders(
+        Orders order = new Orders(
                 entity.getCustomerId(),
                 entity.getOrderId(),
                 items
         );
+        order.setId(entity.getId());
+        order.setStatus(EnumOrderStatus.valueOf(entity.getStatus()));
+        order.setReason(entity.getReason());
+        order.setCreatedAt(entity.getCreatedAt());
+        order.setUpdatedAt(entity.getUpdatedAt());
+        return order;
     }
 }
