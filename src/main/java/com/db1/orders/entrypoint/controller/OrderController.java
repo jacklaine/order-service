@@ -1,10 +1,9 @@
 package com.db1.orders.entrypoint.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +21,9 @@ public class OrderController {
     private final CreateOrderUseCase useCase;
 
     @PostMapping
-    public ResponseEntity<CreateOrderResponse> create(@RequestBody Orders request) {
-        var createdOrder = useCase.execute(request);
+    public ResponseEntity<CreateOrderResponse> create(@RequestHeader("Idempotency-Key") String idempotencyKey,
+            @RequestBody Orders request) {
+        var createdOrder = useCase.execute(request, idempotencyKey);
         var saved = new CreateOrderResponse(createdOrder.getId(), createdOrder.getOrderId(),
                 createdOrder.getStatus().getKey());
 
