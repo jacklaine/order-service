@@ -1,6 +1,10 @@
 package com.db1.orders.infra.persistence.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,9 +26,12 @@ public class OrderEventEntity {
 
     private String eventType;
 
-    @Column(columnDefinition = "JSONB")
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
     private String payload;
 
     private boolean processed;
+
+    private LocalDateTime processedAt;
 
 }

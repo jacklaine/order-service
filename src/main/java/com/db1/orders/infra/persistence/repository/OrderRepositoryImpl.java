@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
 import com.db1.orders.domain.interfaces.IOrderRepository;
-import com.db1.orders.domain.interfaces.SpringDataOrderRepository;
 import com.db1.orders.domain.modal.Orders;
 import com.db1.orders.infra.persistence.mapper.OrdersMapper;
 
@@ -28,5 +27,12 @@ public class OrderRepositoryImpl implements IOrderRepository {
     public Optional<Orders> findById(UUID id) {
         return jpaRepository.findById(id)
                 .map(OrdersMapper::toDomain);
+    }
+
+    @Override
+    public Orders findByOrderId(String orderId) {
+        return jpaRepository.findByOrderId(orderId)
+                .map(OrdersMapper::toDomain)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
     }
 }

@@ -2,6 +2,13 @@ package com.db1.orders.domain.modal;
 
 import java.math.BigDecimal;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem {
 
     private String serialNumber;
@@ -9,12 +16,6 @@ public class OrderItem {
     private String quantity;
 
     private BigDecimal unitPrice;
-
-    public OrderItem(String serialNumber, String quantity, BigDecimal unitPrice) {
-        this.serialNumber = serialNumber;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-    }
 
     public String getSerialNumber() {
         return serialNumber;

@@ -1,11 +1,11 @@
 package com.db1.orders.infra.persistence.repository;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
 import com.db1.orders.domain.interfaces.IOrderEventRepository;
-import com.db1.orders.domain.interfaces.SpringDataEventRepository;
 import com.db1.orders.domain.modal.OrderEvent;
 import com.db1.orders.infra.persistence.entity.OrderEventEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,9 +27,14 @@ public class OrderEventImpl implements IOrderEventRepository {
         entity.setOrderId(event.getOrderId());
         entity.setEventType("OrderCreated");
         entity.setPayload(serialize(event));
-        entity.setProcessed(false);
+        entity.setProcessed(event.isProcessed());
 
         repository.save(entity);
+    }
+
+    @Override
+    public void markAsProcessed(String orderId) {
+        repository.markAsProcessed(orderId, LocalDateTime.now());
     }
 
     private String serialize(Object event) {
