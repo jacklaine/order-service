@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OutboxRelay {
+public class JobOutboxRelay {
 
     private final IOrderEventRepository orderEventRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
