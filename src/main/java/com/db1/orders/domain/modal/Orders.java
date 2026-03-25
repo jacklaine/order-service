@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.db1.orders.domain.enums.EnumOrderStatus;
 
 public class Orders {
-    
+
     private UUID id;
 
     private String orderId;
@@ -20,16 +20,14 @@ public class Orders {
 
     private String reason;
 
-    private Instant createdAt;
-
-    private Instant updatedAt;
-
-    public Orders(String customerId, String orderId, List<OrderItem> items) {
-        this.id = UUID.randomUUID();
-        this.customerId = customerId;
+    public Orders(UUID id, String orderId, String customerId, List<OrderItem> items, EnumOrderStatus status,
+            String reason) {
+        this.id = id;
         this.orderId = orderId;
+        this.customerId = customerId;
         this.items = items;
-        this.status = EnumOrderStatus.PENDING;
+        this.status = status;
+        this.reason = reason;
     }
 
     public void confirm() {
@@ -45,64 +43,24 @@ public class Orders {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public String getOrderId() {
         return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
     }
 
     public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
     public List<OrderItem> getItems() {
         return items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
     }
 
     public EnumOrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(EnumOrderStatus status) {
-        this.status = status;
-    }
-
     public String getReason() {
         return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
 }

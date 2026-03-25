@@ -40,16 +40,13 @@ public class OrdersMapper {
                     .toList();
         }
 
-        Orders order = new Orders(
-                entity.getCustomerId(),
+        return new Orders(
+                entity.getId(),
                 entity.getOrderId(),
-                items
-        );
-        order.setId(entity.getId());
-        order.setStatus(EnumOrderStatus.valueOf(entity.getStatus()));
-        order.setReason(entity.getReason());
-        order.setCreatedAt(entity.getCreatedAt());
-        order.setUpdatedAt(entity.getUpdatedAt());
-        return order;
+                entity.getCustomerId(),
+                items,
+                EnumOrderStatus.valueOf(entity.getStatus()),
+                entity.getReason());
+
     }
 }

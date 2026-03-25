@@ -11,7 +11,7 @@ public class OrderItemMapper {
 
     public static OrderItemEntity toEntity(OrderItem item, OrdersEntity order) {
         OrderItemEntity entity = new OrderItemEntity();
-        entity.setSerialNumber(item.getSerialNumber());
+        entity.setSku(item.getSku());
         entity.setQuantity(item.getQuantity());
         entity.setUnitPrice(item.getUnitPrice());
         entity.setOrder(order);
@@ -19,6 +19,6 @@ public class OrderItemMapper {
     }
 
     public static OrderItem toDomain(OrderItemEntity entity) {
-        return new OrderItem(entity.getSerialNumber(), entity.getQuantity(), entity.getUnitPrice());
+        return new OrderItem(entity.getSku(), entity.getQuantity(), entity.getUnitPrice());
     }
 }

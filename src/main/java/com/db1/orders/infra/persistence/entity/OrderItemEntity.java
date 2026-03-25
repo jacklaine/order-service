@@ -22,7 +22,7 @@ public class OrderItemEntity {
     @GeneratedValue
     private UUID id;
 
-    private String serialNumber;
+    private String sku;
 
     private String quantity;
 

@@ -2,11 +2,6 @@ package com.db1.orders.domain.modal;
 
 import java.util.UUID;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class OrderEvent {
 
     private UUID id;
@@ -25,6 +20,26 @@ public class OrderEvent {
         this.eventType = "OrderCreated";
         this.payload = payload;
         this.processed = false;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public boolean isProcessed() {
+        return processed;
     }
 
 }

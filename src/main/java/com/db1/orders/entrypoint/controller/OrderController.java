@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.db1.orders.application.dto.CreateOrderRequest;
 import com.db1.orders.application.dto.CreateOrderResponse;
 import com.db1.orders.application.usecase.CreateOrderUseCase;
 import com.db1.orders.application.usecase.FindOrderByUseCase;
 import com.db1.orders.domain.modal.Orders;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,7 +29,7 @@ public class OrderController {
 
         @PostMapping
         public ResponseEntity<CreateOrderResponse> create(@RequestHeader("Idempotency-Key") String idempotencyKey,
-                        @RequestBody Orders request) {
+                        @Valid @RequestBody CreateOrderRequest request) {
                 var createdOrder = createOrderUseCase.execute(request, idempotencyKey);
 
                 CreateOrderResponse response = new CreateOrderResponse(
@@ -41,12 +43,11 @@ public class OrderController {
         @GetMapping("/{orderId}")
         public ResponseEntity<Orders> getById(@PathVariable String orderId) {
                 Orders order = findOrderByUseCase.execute(orderId);
-
-                if (order == null) {
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                if (order != null) {
+                        return ResponseEntity.ok(order);
                 }
-
-                return ResponseEntity.ok(order);
+                
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
 }

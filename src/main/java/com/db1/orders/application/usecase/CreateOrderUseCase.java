@@ -1,15 +1,19 @@
 package com.db1.orders.application.usecase;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.db1.orders.application.dto.CreateOrderRequest;
+import com.db1.orders.application.dto.OrderItemRequest;
 import com.db1.orders.application.port.out.OrderEventPublisher;
 import com.db1.orders.domain.interfaces.IOrderEventRepository;
 import com.db1.orders.domain.interfaces.IOrderRepository;
 import com.db1.orders.domain.modal.OrderEvent;
+import com.db1.orders.domain.modal.OrderItem;
 import com.db1.orders.domain.modal.Orders;
 import com.db1.orders.infra.messaging.idempotency.IdempotencyKeyManager;
 import com.db1.orders.infra.messaging.kafka.dto.OrderEventPayload;
@@ -32,12 +36,14 @@ public class CreateOrderUseCase {
     private final IdempotencyKeyManager idempotencyKeyManager;
 
     @Transactional
-    public Orders execute(Orders order, String idempotencyKey) {
+    public Orders execute(CreateOrderRequest request, String idempotencyKey) {
         var existingOrderId = idempotencyKeyManager.getOrderIdForKey(idempotencyKey);
         if (existingOrderId != null) {
             log.info("Requisição duplicada detectada para a chave de idempotência: {}", idempotencyKey);
             return orderRepository.findByOrderId(existingOrderId);
         }
+
+        var order = toDomain(request);
 
         var savedOrder = transactionTemplate.execute(status -> {
             var s = orderRepository.save(order);
@@ -45,7 +51,7 @@ public class CreateOrderUseCase {
 
             String payloadJson;
             try {
-                payloadJson = objectMapper.writeValueAsString(buildPayload(order));
+                payloadJson = objectMapper.writeValueAsString(buildPayload(s));
             } catch (JsonProcessingException e) {
                 log.error("Erro ao serializar payload. orderId={}", order.getOrderId(), e);
                 status.setRollbackOnly();
@@ -65,6 +71,17 @@ public class CreateOrderUseCase {
         }
 
         return savedOrder;
+    }
+
+    private Orders toDomain(CreateOrderRequest request) {
+        var items = request.getItems().stream()
+                .map(this::toDomainItem)
+                .collect(Collectors.toList());
+        return new Orders(null, request.getCustomerId(), request.getOrderId(), items, null, null);
+    }
+
+    private OrderItem toDomainItem(OrderItemRequest itemRequest) {
+        return new OrderItem(itemRequest.getSku(), itemRequest.getQuantity(), itemRequest.getUnitPrice());
     }
 
     private OrderEventPayload buildPayload(Orders order) {

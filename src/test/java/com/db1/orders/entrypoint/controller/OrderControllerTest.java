@@ -37,7 +37,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
                     "orderId": "ORD-API-001",
                     "items": [
                         {
-                            "serialNumber": "SN-API-1",
+                            "sku": "SN-API-1",
                             "quantity": "3",
                             "unitPrice": 15.50
                         }
@@ -63,7 +63,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
                     "orderId": "ORD-API-002",
                     "items": [
                         {
-                            "serialNumber": "SN-API-2",
+                            "sku": "SN-API-2",
                             "quantity": "1",
                             "unitPrice": 10.00
                         }
@@ -99,7 +99,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
                     "orderId": "ORD-API-003",
                     "items": [
                         {
-                            "serialNumber": "SN-API-3",
+                            "sku": "SN-API-3",
                             "quantity": "1",
                             "unitPrice": 5.00
                         }
@@ -121,7 +121,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
                     "orderId": "ORD-API-004",
                     "items": [
                         {
-                            "serialNumber": "SN-API-4",
+                            "sku": "SN-API-4",
                             "quantity": "2",
                             "unitPrice": 20.00
                         }
@@ -145,7 +145,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.customerId").value("CUST-API-4"))
                 .andExpect(jsonPath("$.status").value("PENDING"))
                 .andExpect(jsonPath("$.items").isArray())
-                .andExpect(jsonPath("$.items[0].serialNumber").value("SN-API-4"));
+                .andExpect(jsonPath("$.items[0].sku").value("SN-API-4"));
     }
 
     @Test

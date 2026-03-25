@@ -17,7 +17,7 @@ import lombok.Setter;
 public class OrderItemRequest {
 
     @NotBlank
-    private String serialNumber;
+    private String sku;
 
     @NotBlank
     private String quantity;
