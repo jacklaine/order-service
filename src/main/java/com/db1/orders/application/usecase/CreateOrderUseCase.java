@@ -10,6 +10,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.db1.orders.application.dto.CreateOrderRequest;
 import com.db1.orders.application.dto.OrderItemRequest;
 import com.db1.orders.application.port.out.OrderEventPublisher;
+import com.db1.orders.domain.enums.EnumOrderStatus;
 import com.db1.orders.domain.interfaces.IOrderEventRepository;
 import com.db1.orders.domain.interfaces.IOrderRepository;
 import com.db1.orders.domain.modal.OrderEvent;
@@ -77,7 +78,7 @@ public class CreateOrderUseCase {
         var items = request.getItems().stream()
                 .map(this::toDomainItem)
                 .collect(Collectors.toList());
-        return new Orders(null, request.getCustomerId(), request.getOrderId(), items, null, null);
+        return new Orders(null, request.getOrderId(), request.getCustomerId(), items, EnumOrderStatus.PENDING, null);
     }
 
     private OrderItem toDomainItem(OrderItemRequest itemRequest) {
