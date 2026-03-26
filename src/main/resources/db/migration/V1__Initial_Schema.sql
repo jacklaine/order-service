@@ -14,8 +14,8 @@ CREATE TABLE orders (
 CREATE TABLE order_item (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID NOT NULL,
-    serial_number VARCHAR(255),
-    quantity VARCHAR(50) NOT NULL,
+    sku VARCHAR(255),
+    quantity INTEGER NOT NULL,
     unit_price NUMERIC(19, 2) NOT NULL,
     CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
