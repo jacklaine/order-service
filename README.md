@@ -85,6 +85,11 @@ Obs: Como o projeto já possui o launch.json configurado, basta rodá-lo com F5 
 # Health check
 curl http://localhost:8080/actuator/health
 
+#Infos
+curl http://localhost:8080/actuator/info
+
+# Métricas
+curl http://localhost:8080/actuator/metrics
 
 # Métricas do Prometheus
 curl http://localhost:8080/actuator/prometheus
