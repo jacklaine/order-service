@@ -18,7 +18,7 @@ public interface SpringDataEventRepository extends JpaRepository<OrderEventEntit
     @Modifying
     @Transactional
     @Query("UPDATE OrderEventEntity e SET e.processed = true, e.processedAt = :now WHERE e.orderId = :orderId")
-    void markAsProcessed(@Param("orderId") String orderId, @Param("now") LocalDateTime now);
+    void markAsProcessed(@Param("orderId") UUID orderId, @Param("now") LocalDateTime now);
 
     List<OrderEventEntity> findByProcessedFalse();
 }

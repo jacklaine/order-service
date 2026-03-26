@@ -1,5 +1,7 @@
 package com.db1.orders.application.usecase;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.db1.orders.domain.interfaces.IOrderRepository;
@@ -15,8 +17,8 @@ public class FindOrderByUseCase {
 
     private final IOrderRepository orderRepository;
 
-    public Orders execute(String orderId) {
-        return orderRepository.findByOrderId(orderId);
+    public Orders execute(UUID id) {
+        return orderRepository.findById(id).orElse(null);
     }
 
 }

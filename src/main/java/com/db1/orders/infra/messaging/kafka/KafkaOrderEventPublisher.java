@@ -24,7 +24,7 @@ public class KafkaOrderEventPublisher implements OrderEventPublisher {
     @Override
     public void publishOrderCreated(Orders order, OrderEventPayload payload) {
 
-        var orderId = order.getOrderId();
+        var orderId = order.getId().toString();
 
         var event = new OrderEventEnvelope();
         event.setType("OrderCreated");

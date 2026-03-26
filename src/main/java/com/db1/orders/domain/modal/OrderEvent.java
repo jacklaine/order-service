@@ -6,7 +6,7 @@ public class OrderEvent {
 
     private UUID id;
 
-    private String orderId;
+    private UUID orderId;
 
     private String eventType;
 
@@ -14,7 +14,7 @@ public class OrderEvent {
 
     private boolean processed;
 
-    public OrderEvent(String orderId, String payload) {
+    public OrderEvent(UUID orderId, String payload) {
         this.id = UUID.randomUUID();
         this.orderId = orderId;
         this.eventType = "OrderCreated";
@@ -26,7 +26,7 @@ public class OrderEvent {
         return id;
     }
 
-    public String getOrderId() {
+    public UUID getOrderId() {
         return orderId;
     }
 

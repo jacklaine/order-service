@@ -18,7 +18,6 @@ public class OrdersMapper {
         OrdersEntity entity = new OrdersEntity();
         entity.setCustomerId(order.getCustomerId());
         entity.setStatus(order.getStatus().getKey());
-        entity.setOrderId(order.getOrderId());
         entity.setReason(order.getReason());
 
         if (order.getItems() != null) {
@@ -42,7 +41,6 @@ public class OrdersMapper {
 
         return new Orders(
                 entity.getId(),
-                entity.getOrderId(),
                 entity.getCustomerId(),
                 items,
                 EnumOrderStatus.valueOf(entity.getStatus()),

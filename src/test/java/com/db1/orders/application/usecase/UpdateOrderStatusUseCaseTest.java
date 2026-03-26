@@ -33,24 +33,24 @@ class UpdateOrderStatusUseCaseTest extends AbstractIntegrationTest {
     @Test
     void shouldConfirmOrder() {
         OrderItemRequest item = new OrderItemRequest("SN-001", 1, new BigDecimal("50.00"));
-        CreateOrderRequest order = new CreateOrderRequest("CUST-001", "ORD-001", List.of(item));
-        createOrderUseCase.execute(order, "idem-001");
+        CreateOrderRequest order = new CreateOrderRequest("CUST-001", List.of(item));
+        Orders created = createOrderUseCase.execute(order, "idem-001");
 
-        updateOrderStatusUseCase.confirm("ORD-001");
+        updateOrderStatusUseCase.confirm(created.getId());
 
-        Orders updated = orderRepository.findByOrderId("ORD-001");
+        Orders updated = orderRepository.findById(created.getId()).orElse(null);
         assertEquals(EnumOrderStatus.CONFIRMED, updated.getStatus());
     }
 
     @Test
     void shouldRejectOrder() {
         OrderItemRequest item = new OrderItemRequest("SN-002", 1, new BigDecimal("50.00"));
-        CreateOrderRequest order = new CreateOrderRequest("CUST-002", "ORD-002", List.of(item));
-        createOrderUseCase.execute(order, "idem-002");
+        CreateOrderRequest order = new CreateOrderRequest("CUST-002", List.of(item));
+        Orders created = createOrderUseCase.execute(order, "idem-002");
 
-        updateOrderStatusUseCase.reject("ORD-002", "Estoque baixo");
+        updateOrderStatusUseCase.reject(created.getId(), "Estoque baixo");
 
-        Orders updated = orderRepository.findByOrderId("ORD-002");
+        Orders updated = orderRepository.findById(created.getId()).orElse(null);
         assertEquals(EnumOrderStatus.REJECTED, updated.getStatus());
         assertEquals("Estoque baixo", updated.getReason());
     }

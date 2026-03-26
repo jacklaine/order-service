@@ -1,5 +1,7 @@
 package com.db1.orders.entrypoint.controller;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,15 +36,14 @@ public class OrderController {
 
                 CreateOrderResponse response = new CreateOrderResponse(
                                 createdOrder.getId(),
-                                createdOrder.getOrderId(),
                                 createdOrder.getStatus().getKey());
 
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
 
-        @GetMapping("/{orderId}")
-        public ResponseEntity<Orders> getById(@PathVariable String orderId) {
-                Orders order = findOrderByUseCase.execute(orderId);
+        @GetMapping("/{id}")
+        public ResponseEntity<Orders> getById(@PathVariable UUID id) {
+                Orders order = findOrderByUseCase.execute(id);
                 if (order != null) {
                         return ResponseEntity.ok(order);
                 }

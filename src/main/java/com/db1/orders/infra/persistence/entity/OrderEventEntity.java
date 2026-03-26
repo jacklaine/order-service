@@ -22,7 +22,7 @@ public class OrderEventEntity {
     @Id
     private UUID id;
 
-    private String orderId;
+    private UUID orderId;
 
     private String eventType;
 

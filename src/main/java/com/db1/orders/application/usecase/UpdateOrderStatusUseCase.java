@@ -1,5 +1,7 @@
 package com.db1.orders.application.usecase;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +18,13 @@ public class UpdateOrderStatusUseCase {
     private final IOrderRepository orderRepository;
 
     @Transactional
-    public void confirm(String orderId) {
+    public void confirm(UUID orderId) {
         orderRepository.updateStatus(orderId, "CONFIRMED", null);
         log.info("OrderConfirmed: {}", orderId);
     }
 
     @Transactional
-    public void reject(String orderId, String reason) {
+    public void reject(UUID orderId, String reason) {
         orderRepository.updateStatus(orderId, "REJECTED", reason);
         log.info("OrderRejected: {}, Reason: {}", orderId, reason);
     }

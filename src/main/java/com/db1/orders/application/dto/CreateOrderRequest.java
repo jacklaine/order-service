@@ -19,9 +19,6 @@ public class CreateOrderRequest {
     @NotBlank
     private String customerId;
 
-    @NotBlank
-    private String orderId;
-
     @NotEmpty
     @Valid
     private List<OrderItemRequest> items;

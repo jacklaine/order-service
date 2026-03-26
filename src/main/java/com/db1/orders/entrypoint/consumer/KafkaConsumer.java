@@ -1,5 +1,7 @@
 package com.db1.orders.entrypoint.consumer;
 
+import java.util.UUID;
+
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -28,17 +30,18 @@ public class KafkaConsumer {
             return;
         }
 
-        var orderId = event.getPayload().getOrderId();
+        var orderIdStr = event.getPayload().getOrderId();
 
-        if (orderId == null) {
+        if (orderIdStr == null) {
             log.warn("Evento sem orderId: {}", event);
             return;
         }
 
+        var orderId = UUID.fromString(orderIdStr);
         handle(event, orderId);
     }
 
-    private void handle(OrderEventEnvelope event, String orderId) {
+    private void handle(OrderEventEnvelope event, UUID orderId) {
         switch (event.getType()) {
 
             case "OrderConfirmed" -> confirm(orderId);
@@ -53,12 +56,12 @@ public class KafkaConsumer {
         }
     }
 
-    private void confirm(String orderId) {
+    private void confirm(UUID orderId) {
         log.info("Confirmando pedido. orderId={}", orderId);
         updateOrderStatusUseCase.confirm(orderId);
     }
 
-    private void reject(String orderId, String reason) {
+    private void reject(UUID orderId, String reason) {
         var safeReason = reason != null ? reason : "Sem motivo";
         log.info("Rejeitando pedido. orderId={}, reason={}", orderId, safeReason);
         updateOrderStatusUseCase.reject(orderId, safeReason);

@@ -24,7 +24,7 @@ public class KafkaEventDLQPublisher implements EventDQLPublisher {
     @Override
     public void sendToDLQ(OrderEventEntity event, Exception error) {
 
-        var orderId = event.getOrderId();
+        var orderId = event.getOrderId().toString();
         var eventType = event.getEventType();
         var payload = event.getPayload();
 

@@ -10,8 +10,6 @@ public class Orders {
 
     private UUID id;
 
-    private String orderId;
-
     private String customerId;
 
     private List<OrderItem> items;
@@ -20,10 +18,9 @@ public class Orders {
 
     private String reason;
 
-    public Orders(UUID id, String orderId, String customerId, List<OrderItem> items, EnumOrderStatus status,
+    public Orders(UUID id, String customerId, List<OrderItem> items, EnumOrderStatus status,
             String reason) {
         this.id = id;
-        this.orderId = orderId;
         this.customerId = customerId;
         this.items = items;
         this.status = status;
@@ -41,10 +38,6 @@ public class Orders {
 
     public UUID getId() {
         return id;
-    }
-
-    public String getOrderId() {
-        return orderId;
     }
 
     public String getCustomerId() {

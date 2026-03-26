@@ -34,7 +34,6 @@ class OrderControllerTest extends AbstractIntegrationTest {
         String body = """
                 {
                     "customerId": "CUST-API-1",
-                    "orderId": "ORD-API-001",
                     "items": [
                         {
                             "sku": "SN-API-1",
@@ -50,7 +49,6 @@ class OrderControllerTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.orderId").value("ORD-API-001"))
                 .andExpect(jsonPath("$.status").value("PENDING"))
                 .andExpect(jsonPath("$.id").exists());
     }
@@ -60,7 +58,6 @@ class OrderControllerTest extends AbstractIntegrationTest {
         String body = """
                 {
                     "customerId": "CUST-API-2",
-                    "orderId": "ORD-API-002",
                     "items": [
                         {
                             "sku": "SN-API-2",
@@ -96,7 +93,6 @@ class OrderControllerTest extends AbstractIntegrationTest {
         String body = """
                 {
                     "customerId": "CUST-API-3",
-                    "orderId": "ORD-API-003",
                     "items": [
                         {
                             "sku": "SN-API-3",
@@ -118,7 +114,6 @@ class OrderControllerTest extends AbstractIntegrationTest {
         String body = """
                 {
                     "customerId": "CUST-API-4",
-                    "orderId": "ORD-API-004",
                     "items": [
                         {
                             "sku": "SN-API-4",
@@ -136,12 +131,11 @@ class OrderControllerTest extends AbstractIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        String orderId = objectMapper.readTree(createResult.getResponse().getContentAsString())
-                .get("orderId").asText();
+        String id = objectMapper.readTree(createResult.getResponse().getContentAsString())
+                .get("id").asText();
 
-        mockMvc.perform(get("/orders/" + orderId))
+        mockMvc.perform(get("/orders/" + id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderId").value("ORD-API-004"))
                 .andExpect(jsonPath("$.customerId").value("CUST-API-4"))
                 .andExpect(jsonPath("$.status").value("PENDING"))
                 .andExpect(jsonPath("$.items").isArray())
@@ -150,7 +144,7 @@ class OrderControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldReturn404ForNonExistentOrder() throws Exception {
-        mockMvc.perform(get("/orders/32132123123123"))
+        mockMvc.perform(get("/orders/00000000-0000-0000-0000-000000000000"))
                 .andExpect(status().isNotFound());
     }
 }

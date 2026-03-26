@@ -41,34 +41,34 @@ public class CreateOrderUseCase {
         var existingOrderId = idempotencyKeyManager.getOrderIdForKey(idempotencyKey);
         if (existingOrderId != null) {
             log.info("Requisição duplicada detectada para a chave de idempotência: {}", idempotencyKey);
-            return orderRepository.findByOrderId(existingOrderId);
+            return orderRepository.findById(existingOrderId).orElse(null);
         }
 
         var order = toDomain(request);
 
         var savedOrder = transactionTemplate.execute(status -> {
             var s = orderRepository.save(order);
-            idempotencyKeyManager.storeIdempotencyKey(idempotencyKey, s.getOrderId());
+            idempotencyKeyManager.storeIdempotencyKey(idempotencyKey, s.getId());
 
             String payloadJson;
             try {
                 payloadJson = objectMapper.writeValueAsString(buildPayload(s));
             } catch (JsonProcessingException e) {
-                log.error("Erro ao serializar payload. orderId={}", order.getOrderId(), e);
+                log.error("Erro ao serializar payload. orderId={}", order.getId(), e);
                 status.setRollbackOnly();
                 throw new RuntimeException("Erro ao serializar payload", e);
             }
 
-            orderEventRepository.save(new OrderEvent(s.getOrderId(), payloadJson));
+            orderEventRepository.save(new OrderEvent(s.getId(), payloadJson));
             return s;
         });
 
         // Kafka chamado após commit confirmado, fora do contexto da transação
         try {
             eventPublisher.publishOrderCreated(savedOrder, buildPayload(savedOrder));
-            orderEventRepository.markAsProcessed(savedOrder.getOrderId());
+            orderEventRepository.markAsProcessed(savedOrder.getId());
         } catch (Exception e) {
-            log.warn("Falha ao publicar evento. orderId={}.", savedOrder.getOrderId(), e);
+            log.warn("Falha ao publicar evento. orderId={}.", savedOrder.getId(), e);
         }
 
         return savedOrder;
@@ -78,7 +78,7 @@ public class CreateOrderUseCase {
         var items = request.getItems().stream()
                 .map(this::toDomainItem)
                 .collect(Collectors.toList());
-        return new Orders(null, request.getOrderId(), request.getCustomerId(), items, EnumOrderStatus.PENDING, null);
+        return new Orders(null, request.getCustomerId(), items, EnumOrderStatus.PENDING, null);
     }
 
     private OrderItem toDomainItem(OrderItemRequest itemRequest) {
@@ -87,7 +87,7 @@ public class CreateOrderUseCase {
 
     private OrderEventPayload buildPayload(Orders order) {
         var payload = new OrderEventPayload();
-        payload.setOrderId(order.getOrderId());
+        payload.setOrderId(order.getId().toString());
         payload.setCustomerId(order.getCustomerId());
         payload.setItems(order.getItems());
         payload.setCreatedAt(LocalDateTime.now().toString());

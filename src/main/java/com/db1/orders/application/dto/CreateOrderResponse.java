@@ -11,8 +11,6 @@ public class CreateOrderResponse {
 
     private UUID id;
 
-    private String orderId;
-
     private String status;
     
 }

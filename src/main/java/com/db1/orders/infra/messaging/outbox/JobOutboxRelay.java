@@ -38,7 +38,7 @@ public class JobOutboxRelay {
                 OrderEventPayload payload = objectMapper.readValue(event.getPayload(), OrderEventPayload.class);
 
                 OrderEventEnvelope envelope = new OrderEventEnvelope(event.getEventType(), payload);
-                kafkaTemplate.send(KafkaConfig.TOPIC_ORDERS_EVENTS, event.getOrderId(), envelope).get();
+                kafkaTemplate.send(KafkaConfig.TOPIC_ORDERS_EVENTS, event.getOrderId().toString(), envelope).get();
                 orderEventRepository.markAsProcessed(event.getOrderId());
                 log.info("JOB publicou o evento {} do orderId={}", event.getEventType(), event.getOrderId());
             } catch (Exception e) {

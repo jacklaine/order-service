@@ -31,16 +31,9 @@ public class OrderRepositoryImpl implements IOrderRepository {
     }
 
     @Override
-    public Orders findByOrderId(String orderId) {
-        return jpaRepository.findByOrderId(orderId)
-                .map(OrdersMapper::toDomain)
-                .orElse(null);
-    }
-
-    @Override
-    public void updateStatus(String orderId, String status, String reason) {
-        OrdersEntity entity = jpaRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("OrderId não encontrado: " + orderId));
+    public void updateStatus(UUID id, String status, String reason) {
+        OrdersEntity entity = jpaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Order não encontrado: " + id));
 
         entity.setStatus(status);
         if (reason != null) {

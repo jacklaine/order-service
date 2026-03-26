@@ -34,7 +34,7 @@ public class OrderEventImpl implements IOrderEventRepository {
     }
 
     @Override
-    public void markAsProcessed(String orderId) {
+    public void markAsProcessed(UUID orderId) {
         repository.markAsProcessed(orderId, LocalDateTime.now());
     }
 

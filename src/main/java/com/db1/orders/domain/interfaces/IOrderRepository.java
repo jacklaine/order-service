@@ -11,7 +11,5 @@ public interface IOrderRepository {
 
     Optional<Orders> findById(UUID id);
 
-    Orders findByOrderId(String orderId);
-
-    void updateStatus(String orderId, String status, String reason);
+    void updateStatus(UUID id, String status, String reason);
 }

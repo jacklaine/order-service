@@ -15,14 +15,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "orders", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_order_order_id", columnNames = "orderId")
-})
+@Table(name = "orders")
 @Getter
 @Setter
 public class OrdersEntity {
@@ -30,8 +27,6 @@ public class OrdersEntity {
     @Id
     @GeneratedValue
     private UUID id;
-
-    private String orderId;
 
     private String customerId;
 

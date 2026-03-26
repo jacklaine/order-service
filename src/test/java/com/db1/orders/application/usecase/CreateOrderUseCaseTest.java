@@ -31,7 +31,7 @@ class CreateOrderUseCaseTest extends AbstractIntegrationTest {
     @Test
     void shouldCreateOrderWithPendingStatus() {
         OrderItemRequest item = new OrderItemRequest("SN-001", 2, new BigDecimal("29.99"));
-        CreateOrderRequest request = new CreateOrderRequest("CUST-1", "ORD-TEST-001", List.of(item));
+        CreateOrderRequest request = new CreateOrderRequest("CUST-1", List.of(item));
 
         Orders saved = createOrderUseCase.execute(request, "idem-key-001");
 
@@ -40,14 +40,14 @@ class CreateOrderUseCaseTest extends AbstractIntegrationTest {
 
         Optional<Orders> found = orderRepository.findById(saved.getId());
         assertNotNull(found);
-        assertNotNull(found.get().getOrderId());
+        assertNotNull(found.get().getId());
     }
 
     @Test
     void shouldReturnSameOrderForDuplicateIdempotencyKey() {
         OrderItemRequest item = new OrderItemRequest("SN-002", 1, new BigDecimal("10.00"));
-        CreateOrderRequest request1 = new CreateOrderRequest("CUST-2", "ORD-TEST-002", List.of(item));
-        CreateOrderRequest request2 = new CreateOrderRequest("CUST-2", "ORD-TEST-002B", List.of(item));
+        CreateOrderRequest request1 = new CreateOrderRequest("CUST-2", List.of(item));
+        CreateOrderRequest request2 = new CreateOrderRequest("CUST-2", List.of(item));
 
         Orders first = createOrderUseCase.execute(request1, "idem-key-duplicate");
         Orders second = createOrderUseCase.execute(request2, "idem-key-duplicate");

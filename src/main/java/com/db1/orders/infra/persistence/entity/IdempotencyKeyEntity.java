@@ -29,13 +29,13 @@ public class IdempotencyKeyEntity {
     private String idempotencyKey;
 
     @Column(nullable = false)
-    private String orderId;
+    private UUID orderId;
 
     @Column(updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    public IdempotencyKeyEntity(String idempotencyKey, String orderId) {
+    public IdempotencyKeyEntity(String idempotencyKey, UUID orderId) {
         this.idempotencyKey = idempotencyKey;
         this.orderId = orderId;
     }
