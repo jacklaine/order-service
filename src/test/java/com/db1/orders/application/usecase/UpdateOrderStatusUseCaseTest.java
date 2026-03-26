@@ -32,7 +32,7 @@ class UpdateOrderStatusUseCaseTest extends AbstractIntegrationTest {
 
     @Test
     void shouldConfirmOrder() {
-        OrderItemRequest item = new OrderItemRequest("SN-001", "1", new BigDecimal("50.00"));
+        OrderItemRequest item = new OrderItemRequest("SN-001", 1, new BigDecimal("50.00"));
         CreateOrderRequest order = new CreateOrderRequest("CUST-001", "ORD-001", List.of(item));
         createOrderUseCase.execute(order, "idem-001");
 
@@ -44,7 +44,7 @@ class UpdateOrderStatusUseCaseTest extends AbstractIntegrationTest {
 
     @Test
     void shouldRejectOrder() {
-        OrderItemRequest item = new OrderItemRequest("SN-002", "1", new BigDecimal("50.00"));
+        OrderItemRequest item = new OrderItemRequest("SN-002", 1, new BigDecimal("50.00"));
         CreateOrderRequest order = new CreateOrderRequest("CUST-002", "ORD-002", List.of(item));
         createOrderUseCase.execute(order, "idem-002");
 

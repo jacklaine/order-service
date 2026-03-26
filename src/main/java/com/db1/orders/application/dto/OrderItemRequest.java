@@ -19,8 +19,9 @@ public class OrderItemRequest {
     @NotBlank
     private String sku;
 
-    @NotBlank
-    private String quantity;
+    @NotNull
+    @Positive
+    private int quantity;
 
     @NotNull
     @Positive

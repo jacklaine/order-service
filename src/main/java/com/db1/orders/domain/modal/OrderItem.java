@@ -6,11 +6,11 @@ public class OrderItem {
 
     private String sku;
 
-    private String quantity;
+    private int quantity;
 
     private BigDecimal unitPrice;
 
-    public OrderItem(String sku, String quantity, BigDecimal unitPrice) {
+    public OrderItem(String sku, int quantity, BigDecimal unitPrice) {
         this.sku = sku;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
@@ -20,7 +20,7 @@ public class OrderItem {
         return sku;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 

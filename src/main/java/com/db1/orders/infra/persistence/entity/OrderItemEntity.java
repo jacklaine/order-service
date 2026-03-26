@@ -24,7 +24,7 @@ public class OrderItemEntity {
 
     private String sku;
 
-    private String quantity;
+    private int quantity;
 
     private BigDecimal unitPrice;
 
