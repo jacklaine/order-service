@@ -1,6 +1,6 @@
 # Order Service
 
-Serviço de gerenciamento de pedidos da Anymarket, responsável por orquestrar a criação, atualização e rastreamento de pedidos através de um sistema orientado por eventos.
+Serviço de gerenciamento de pedidos, responsável por orquestrar a criação, atualização e rastreamento de pedidos através de um sistema orientado por eventos.
 
 ## 📋 Visão Geral
 
